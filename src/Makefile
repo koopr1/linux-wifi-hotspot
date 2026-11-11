@@ -59,7 +59,7 @@ install: $(ODIR)/wihotspot-gui
 	install -Dm644 scripts/policies/polkit.rules $(DESTDIR)$(PREFIX)/share/polkit-1/rules.d/90-org.opensuse.policykit.wihotspot.rules
 	install -Dm644 scripts/policies/polkit.policy $(DESTDIR)$(PREFIX)/share/polkit-1/actions/org.opensuse.policykit.wihotspot.policy
 	install -Dm755 $(ODIR)/wihotspot-gui $(DESTDIR)$(BINDIR)/$(APP_GUI_BINARY)
-	cd scripts && $(MAKE) install
+	$(MAKE) -C scripts install
 
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/share/pixmaps/wihotspot.png
@@ -72,7 +72,7 @@ uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/share/polkit-1/rules.d/90-org.opensuse.policykit.wihotspot.rules
 	rm -f $(DESTDIR)$(PREFIX)/share/polkit-1/actions/org.opensuse.policykit.wihotspot.policy
 	rm -f $(DESTDIR)$(BINDIR)/$(APP_GUI_BINARY)
-	cd scripts && $(MAKE) uninstall
+	$(MAKE) -C scripts uninstall
 
 clean-old:
 	rm -f $(DESTDIR)$(PREFIX)/share/pixmaps/wihotspot.png
