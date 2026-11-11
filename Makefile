@@ -16,7 +16,7 @@ release:
 test:
 	mkdir -p build
 	@echo "Testing..."
-	$(MAKE) -C test $(MAKE)
+	$(MAKE) -C test
 
 install-cli-only:
 	@echo "Installing command line interface only..."
