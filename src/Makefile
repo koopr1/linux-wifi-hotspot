@@ -19,10 +19,6 @@ BUILT_SRC = resources.c
 _OBJ = main.o ui.o h_prop.o util.o read_config.o about_ui.o qr_ui.o qrgen.o $(BUILT_SRC:.c=.o)
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-# Determine this makefile's path.
-# Be sure to place this BEFORE `include` directives, if any.
-THIS_FILE := $(lastword $(MAKEFILE_LIST))
-
 # Release optimization flags
 ifeq ($(MAKECMDGOALS),release)
 	CFLAGS += -Os -flto -DNDEBUG
