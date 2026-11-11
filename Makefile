@@ -8,6 +8,11 @@ install:
 	@echo "Installing..."
 	cd src && $(MAKE) install
 
+release:
+	mkdir -p build
+	@echo "Building release binary..."
+	$(MAKE) -C src release
+
 test:
 	mkdir -p build
 	@echo "Testing..."

@@ -23,22 +23,30 @@ OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 # Be sure to place this BEFORE `include` directives, if any.
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 
-.PHONY: clean
+# Release optimization flags
+ifeq ($(MAKECMDGOALS),release)
+	CFLAGS += -Os -flto -DNDEBUG
+	CXXFLAGS += -Os -flto -DNDEBUG
+	LDFLAGS += -flto -Wl,--gc-sections -s
+endif
 
-all: resources.c
+.PHONY: clean release
 
-resources.c: ui/glade/wifih.gresource.xml ui/glade/wifih.ui
-	$(GLIB_COMPILE_RESOURCES) ui/glade/wifih.gresource.xml --target=ui/$@ --sourcedir=ui/glade --generate-source
-	@$(MAKE) -f $(THIS_FILE) wihotspot-gui
-	
+wihotspot-gui: $(OBJ)
+	$(CC) -o $(ODIR)/$@ $^ $(CFLAGS) $(LDFLAGS)
+
+release: clean wihotspot-gui
+
+ui/resources.c: ui/glade/wifih.gresource.xml ui/glade/wifih.ui
+	$(GLIB_COMPILE_RESOURCES) ui/glade/wifih.gresource.xml --target=$@ --sourcedir=ui/glade --generate-source
+
 $(ODIR)/%.o: ui/%.c
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(ODIR)/%.o: ui/%.cpp
 	g++ -c -o $@ $< $(CXXFLAGS)
 
-wihotspot-gui: $(OBJ)
-	$(CC) -o $(ODIR)/$@ $^ $(CFLAGS) $(LDFLAGS)
+$(ODIR)/resources.o: ui/resources.c
 
 install: $(ODIR)/wihotspot-gui
 	install -Dm644 desktop/icons/hotspot@64.png $(DESTDIR)$(PREFIX)/share/pixmaps/wihotspot.png
@@ -73,4 +81,3 @@ clean:
 	rm -f $(ODIR)/*.o
 	rm -f ui/$(BUILT_SRC)
 	rm -f $(ODIR)/wihotspot-gui
-
